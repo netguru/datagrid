@@ -12,8 +12,17 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     self.block = block || default_filter_block
   end
 
-  def enabled
-    options[:if] == nil ? true : options[:if]
+  def enabled(grid)
+    case options[:if]
+    when nil
+      true
+    when Proc
+      options[:if].call(grid)
+    when Symbol, String
+      grid.send(options[:if].to_sym)
+    else
+      raise Datagrid::ConfigurationError, "Incorrect column availability option: #{option.insepct}"
+    end
   end
 
   def parse(value)
