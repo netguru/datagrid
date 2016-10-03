@@ -12,6 +12,10 @@ class Datagrid::Filters::BaseFilter #:nodoc:
     self.block = block || default_filter_block
   end
 
+  def enabled
+    options[:if] == nil ? true : options[:if]
+  end
+
   def parse(value)
     raise NotImplementedError, "#parse(value) suppose to be overwritten"
   end
